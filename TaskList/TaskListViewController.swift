@@ -27,8 +27,20 @@ class TaskListViewController: UITableViewController {
             alpha: 194/255
         )
         
+        navBarApperance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        navBarApperance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        
         navigationController?.navigationBar.standardAppearance = navBarApperance
         navigationController?.navigationBar.scrollEdgeAppearance = navBarApperance
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewTask))
+        
+        navigationController?.navigationBar.tintColor = .white
+    }
+    
+    @objc private func addNewTask() {
+        let newTaskViewController = TaskViewController()
+        present(newTaskViewController, animated: true)
     }
 }
 
