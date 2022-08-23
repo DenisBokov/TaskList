@@ -13,7 +13,6 @@
 		EF8E2C7028B3F18E008C3992 /* TaskList.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EF8E2C6E28B3F18E008C3992 /* TaskList.xcdatamodeld */; };
 		EF8E2C7228B3F18F008C3992 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EF8E2C7128B3F18F008C3992 /* Assets.xcassets */; };
 		EF8E2C7528B3F18F008C3992 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EF8E2C7328B3F18F008C3992 /* LaunchScreen.storyboard */; };
-		EF8E2C7D28B3F6A8008C3992 /* TaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF8E2C7C28B3F6A8008C3992 /* TaskViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,7 +24,6 @@
 		EF8E2C7128B3F18F008C3992 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		EF8E2C7428B3F18F008C3992 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		EF8E2C7628B3F18F008C3992 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		EF8E2C7C28B3F6A8008C3992 /* TaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,7 +59,6 @@
 				EF8E2C6528B3F18E008C3992 /* AppDelegate.swift */,
 				EF8E2C6728B3F18E008C3992 /* SceneDelegate.swift */,
 				EF8E2C6928B3F18E008C3992 /* TaskListViewController.swift */,
-				EF8E2C7C28B3F6A8008C3992 /* TaskViewController.swift */,
 				EF8E2C7128B3F18F008C3992 /* Assets.xcassets */,
 				EF8E2C7328B3F18F008C3992 /* LaunchScreen.storyboard */,
 				EF8E2C7628B3F18F008C3992 /* Info.plist */,
@@ -142,7 +139,6 @@
 			files = (
 				EF8E2C7028B3F18E008C3992 /* TaskList.xcdatamodeld in Sources */,
 				EF8E2C6A28B3F18E008C3992 /* TaskListViewController.swift in Sources */,
-				EF8E2C7D28B3F6A8008C3992 /* TaskViewController.swift in Sources */,
 				EF8E2C6628B3F18E008C3992 /* AppDelegate.swift in Sources */,
 				EF8E2C6828B3F18E008C3992 /* SceneDelegate.swift in Sources */,
 			);
