@@ -9,7 +9,7 @@ import UIKit
 
 class TaskListViewController: UITableViewController {
     
-    private let viewContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    private let viewContext = StoregeMagager.shared.persistentContainer.viewContext
     
     private let cellID = "task"
     private var taskList: [Task] = []
@@ -91,6 +91,11 @@ class TaskListViewController: UITableViewController {
             }
         }
     }
+    
+    private func update(_ taskname: String) {
+        let task = Task(context: viewContext)
+        viewContext.updatedObjects(task)
+    }
 }
 
 extension TaskListViewController {
@@ -106,5 +111,13 @@ extension TaskListViewController {
         cell.contentConfiguration = content
         return cell
     }
+    
+//    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+//        let task = taskList[indexPath.row]
+//        
+//        let deliteAction = UIContextualAction(style: .destructive, title: "Delete", handler: <#UIContextualAction.Handler#>)
+//        
+//        return UISwipeActionsConfiguration(actions: [deliteAction])
+//    }
 }
 
