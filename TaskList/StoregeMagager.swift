@@ -12,11 +12,8 @@ import CoreData
 class StoregeMagager {
     static let shared = StoregeMagager()
     
-    private init() {}
-    
     // MARK: - Core Data stack
-
-    var persistentContainer: NSPersistentContainer = {
+    private let persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "TaskList")
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
@@ -25,9 +22,14 @@ class StoregeMagager {
         })
         return container
     }()
+    
+    private let viewContext: NSManagedObjectContext // объявление контеста
+    
+    private init() {
+        viewContext = persistentContainer.viewContext
+    }
 
     // MARK: - Core Data Saving support
-
     func saveContext () {
         let context = persistentContainer.viewContext
         if context.hasChanges {
@@ -37,6 +39,34 @@ class StoregeMagager {
                 let nserror = error as NSError
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }
+        }
+    }
+    
+    func create(_ taskName: String, completion: (Task) -> Void) {
+        let task = Task(context: viewContext) // оздаем объект модели
+        task.title = taskName
+        completion(task)
+        saveContext()
+    }
+    
+    func update(_ task: Task, newName: String) {
+        task.title = newName
+        saveContext()
+    }
+    
+    func delete(_ task: Task) {
+        viewContext.delete(task)
+        saveContext()
+    }
+    
+    func fetchData(сompletion: (Result<[Task], Error>) -> Void) {
+        let fetchRequest = Task.fetchRequest() // создаем запрос в базу данных
+        
+        do {
+            let task = try viewContext.fetch(fetchRequest)
+            сompletion(.success(task))
+        } catch let error {
+            сompletion(.failure(error))
         }
     }
 }

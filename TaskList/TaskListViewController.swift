@@ -9,8 +9,6 @@ import UIKit
 
 class TaskListViewController: UITableViewController {
     
-    private let viewContext = StoregeMagager.shared.persistentContainer.viewContext
-    
     private let cellID = "task"
     private var taskList: [Task] = []
 
@@ -49,16 +47,6 @@ class TaskListViewController: UITableViewController {
         showAlert(withTitle: "New Task", andMassage: "What do you want to do?")
     }
     
-    private func fetchData() {
-        let fetchRequest = Task.fetchRequest()
-        
-        do {
-            taskList = try  viewContext.fetch(fetchRequest)
-        } catch let error {
-            print(error.localizedDescription)
-        }
-    }
-    
     private func showAlert(withTitle titel: String, andMassage message: String) {
         let alert = UIAlertController(title: titel, message: message, preferredStyle: .alert)
         let saveAction = UIAlertAction(title: "Save", style: .default) { [unowned self] _ in
@@ -75,26 +63,23 @@ class TaskListViewController: UITableViewController {
         present(alert, animated: true)
     }
     
-    private func save(_ taskName: String) {
-        let task = Task(context: viewContext)
-        task.title = taskName
-        taskList.append(task)
-        
-        let cellIndex = IndexPath(row: taskList.count - 1, section: 0)
-        tableView.insertRows(at: [cellIndex], with: .automatic)
-        
-        if viewContext.hasChanges {
-            do {
-                try viewContext.save()
-            } catch let error {
-                print(error.localizedDescription)
+    private func fetchData() {
+        StoregeMagager.shared.fetchData { [unowned self] result in
+            switch result {
+            case .success(let tasks):
+                taskList = tasks
+            case .failure(let error):
+                print(error)
             }
         }
     }
     
-    private func update(_ taskname: String) {
-        let task = Task(context: viewContext)
-        viewContext.updatedObjects(task)
+    private func save(_ taskName: String) {
+        StoregeMagager.shared.create(taskName) { task in
+            taskList.append(task)
+            let cellIndex = IndexPath(row: taskList.count - 1, section: 0)
+            tableView.insertRows(at: [cellIndex], with: .automatic)
+        }
     }
 }
 
@@ -112,12 +97,19 @@ extension TaskListViewController {
         return cell
     }
     
-//    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        
+        let deliteAction = UIContextualAction(style: .destructive, title: "Delete") { [unowned self] _, _, _ in
+            StoregeMagager.shared.delete(taskList.remove(at: indexPath.row))
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+        }
+        
+        return UISwipeActionsConfiguration(actions: [deliteAction])
+    }
+    
+//    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 //        let task = taskList[indexPath.row]
-//        
-//        let deliteAction = UIContextualAction(style: .destructive, title: "Delete", handler: <#UIContextualAction.Handler#>)
-//        
-//        return UISwipeActionsConfiguration(actions: [deliteAction])
+//        showAlertUpdate(withTitle: "edit", andMassage: "Edit", task.title ?? "")
 //    }
 }
 
