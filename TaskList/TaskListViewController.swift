@@ -44,30 +44,14 @@ class TaskListViewController: UITableViewController {
     }
     
     @objc private func addNewTask() {
-        showAlert(withTitle: "New Task", andMassage: "What do you want to do?")
+        showAlert()
     }
     
-    private func showAlert(withTitle titel: String, andMassage message: String) {
-        let alert = UIAlertController(title: titel, message: message, preferredStyle: .alert)
-        let saveAction = UIAlertAction(title: "Save", style: .default) { [unowned self] _ in
-            guard let task = alert.textFields?.first?.text, !task.isEmpty else { return }
-            save(task)
-        }
-        let cancelAction = UIAlertAction(title: "Cancel", style: .destructive)
-        alert.addAction(saveAction)
-        alert.addAction(cancelAction)
-        alert.addTextField { textFild in
-            textFild.placeholder = "New Task"
-        }
-        
-        present(alert, animated: true)
-    }
-    
-    private func fetchData() {
+    private func fetchData() { // загрузка данных
         StoregeMagager.shared.fetchData { [unowned self] result in
             switch result {
             case .success(let tasks):
-                taskList = tasks
+                taskList = tasks // обновляем массив задач в таблице из базы и отображаем их
             case .failure(let error):
                 print(error)
             }
@@ -75,10 +59,10 @@ class TaskListViewController: UITableViewController {
     }
     
     private func save(_ taskName: String) {
-        StoregeMagager.shared.create(taskName) { task in
+        StoregeMagager.shared.create(taskName) { task in // возврат созданной Задачи объекта
             taskList.append(task)
-            let cellIndex = IndexPath(row: taskList.count - 1, section: 0)
-            tableView.insertRows(at: [cellIndex], with: .automatic)
+            let cellIndex = IndexPath(row: taskList.count - 1, section: 0) // получаем индекс строки
+            tableView.insertRows(at: [cellIndex], with: .automatic) // добавляем в таблицу
         }
     }
 }
@@ -107,9 +91,52 @@ extension TaskListViewController {
         return UISwipeActionsConfiguration(actions: [deliteAction])
     }
     
-//    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        let task = taskList[indexPath.row]
-//        showAlertUpdate(withTitle: "edit", andMassage: "Edit", task.title ?? "")
-//    }
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true) // снимаю выделение с ячейки
+        let task = taskList[indexPath.row]
+        showAlert(task: task) {
+            tableView.reloadRows(at: [indexPath], with: .automatic)
+        }
+    }
 }
 
+extension TaskListViewController {
+    private func showAlert(task: Task? = nil, completion: (() -> Void)? = nil) {
+        let titel = task != nil ? "Update Task" : "New Task"
+        let alert = UIAlertController.createAlertController(withTitle: titel)
+        
+        alert.action(task: task) { [weak self] taskName in
+            if let task = task, let completion = completion {
+                StoregeMagager.shared.update(task, newName: taskName)
+                completion()
+            } else {
+                self?.save(taskName)
+            }
+        }
+        
+        present(alert, animated: true)
+    }
+}
+
+extension UIAlertController {
+    static func createAlertController(withTitle title: String) -> UIAlertController {
+        UIAlertController(title: title, message: "What do you want to do?", preferredStyle: .alert)
+    }
+    
+    func action(task: Task?, completion: @escaping(String) -> Void) {
+        let saveAction = UIAlertAction(title: "Save", style: .default) { [weak self] _ in
+            guard let newValue = self?.textFields?.first?.text else { return }
+            guard !newValue.isEmpty else { return }
+            completion(newValue)
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .destructive)
+        
+        addAction(saveAction)
+        addAction(cancelAction)
+        addTextField { textField in
+            textField.placeholder = "Task"
+            textField.text = task?.title
+        }
+    }
+}
