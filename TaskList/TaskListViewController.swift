@@ -7,14 +7,49 @@
 
 import UIKit
 
-class TaskListViewController: UIViewController {
+class TaskListViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(red: 106, green: 81, blue: 59, alpha: 1)
+        view.backgroundColor = UIColor(
+            red: 253/255,
+            green: 228/255,
+            blue: 196/255,
+            alpha: 1
+        )
+        
+        setupNavigationBar()
     }
 
-
+    private func setupNavigationBar() {
+        title = "Task List"
+        navigationController?.navigationBar.prefersLargeTitles = true
+        
+        let navBarAppearans =  UINavigationBarAppearance()
+        navBarAppearans.backgroundColor = UIColor(
+            red: 166/255,
+            green: 123/255,
+            blue: 91/255,
+            alpha: 1
+        )
+        
+        navBarAppearans.titleTextAttributes = [.foregroundColor: UIColor.white]
+        navBarAppearans.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        
+        navigationController?.navigationBar.standardAppearance = navBarAppearans
+        navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearans
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            barButtonSystemItem: .add,
+            target: self,
+            action: #selector(addNewTask)
+        )
+        
+        navigationController?.navigationBar.tintColor = .white
+    }
+    
+    @objc private func addNewTask() {
+        let taskVC = TaskViewController()
+        present(taskVC, animated: true)
+    }
 }
-
-// 177,149,118 106,81,59
