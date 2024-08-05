@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EFB875E12C613A5200988043 /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFB875E02C613A5200988043 /* StorageManager.swift */; };
 		EFDB44422C5B95320056C1FF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFDB44412C5B95320056C1FF /* AppDelegate.swift */; };
 		EFDB44442C5B95320056C1FF /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFDB44432C5B95320056C1FF /* SceneDelegate.swift */; };
 		EFDB44462C5B95320056C1FF /* TaskListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFDB44452C5B95320056C1FF /* TaskListViewController.swift */; };
@@ -17,6 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		EFB875E02C613A5200988043 /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		EFDB443E2C5B95320056C1FF /* TaskList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TaskList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EFDB44412C5B95320056C1FF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EFDB44432C5B95320056C1FF /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -66,6 +68,7 @@
 				EFDB444F2C5B95330056C1FF /* LaunchScreen.storyboard */,
 				EFDB44522C5B95330056C1FF /* Info.plist */,
 				EFDB444A2C5B95320056C1FF /* TaskList.xcdatamodeld */,
+				EFB875E02C613A5200988043 /* StorageManager.swift */,
 			);
 			path = TaskList;
 			sourceTree = "<group>";
@@ -143,6 +146,7 @@
 				EFDB444C2C5B95320056C1FF /* TaskList.xcdatamodeld in Sources */,
 				EFDB44462C5B95320056C1FF /* TaskListViewController.swift in Sources */,
 				EFDB44592C5BC23B0056C1FF /* TaskViewController.swift in Sources */,
+				EFB875E12C613A5200988043 /* StorageManager.swift in Sources */,
 				EFDB44422C5B95320056C1FF /* AppDelegate.swift in Sources */,
 				EFDB44442C5B95320056C1FF /* SceneDelegate.swift in Sources */,
 			);
