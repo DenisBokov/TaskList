@@ -64,11 +64,11 @@
 				EFDB44432C5B95320056C1FF /* SceneDelegate.swift */,
 				EFDB44452C5B95320056C1FF /* TaskListViewController.swift */,
 				EFDB44582C5BC23B0056C1FF /* TaskViewController.swift */,
+				EFB875E02C613A5200988043 /* StorageManager.swift */,
 				EFDB444D2C5B95330056C1FF /* Assets.xcassets */,
 				EFDB444F2C5B95330056C1FF /* LaunchScreen.storyboard */,
 				EFDB44522C5B95330056C1FF /* Info.plist */,
 				EFDB444A2C5B95320056C1FF /* TaskList.xcdatamodeld */,
-				EFB875E02C613A5200988043 /* StorageManager.swift */,
 			);
 			path = TaskList;
 			sourceTree = "<group>";

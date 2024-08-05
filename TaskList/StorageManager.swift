@@ -13,7 +13,7 @@ class StorageManager {
     
     // MARK: - Core Data stack
 
-    lazy var persistentContainer: NSPersistentContainer = {
+    let persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "TaskList")
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
@@ -49,6 +49,17 @@ class StorageManager {
             }
         }
       
+    }
+    
+    func fetch() -> [Task] {
+        let fetchRequest = Task.fetchRequest()
+        
+        do {
+            return try persistentContainer.viewContext.fetch(fetchRequest)
+        } catch let error  {
+            print(error.localizedDescription)
+        }
+        return []
     }
     
     private init() {}

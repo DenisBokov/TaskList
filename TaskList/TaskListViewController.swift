@@ -8,6 +8,9 @@
 import UIKit
 
 class TaskListViewController: UITableViewController {
+    
+    private let callID = "task"
+    private var taskList: [Task] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,7 +21,10 @@ class TaskListViewController: UITableViewController {
             alpha: 1
         )
         
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: callID)
+        
         setupNavigationBar()
+        taskList = StorageManager.shared.fetch()
     }
 
     private func setupNavigationBar() {
@@ -51,5 +57,20 @@ class TaskListViewController: UITableViewController {
     @objc private func addNewTask() {
         let taskVC = TaskViewController()
         present(taskVC, animated: true)
+    }
+}
+
+extension TaskListViewController {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        taskList.count
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: callID, for: indexPath)
+        let task = taskList[indexPath.row]
+        var content = cell.defaultContentConfiguration()
+        content.text = task.title
+        cell.contentConfiguration = content
+        return cell
     }
 }
