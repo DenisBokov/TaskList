@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol TaskViewControllerDelegate {
+    func reloadData()
+}
+
 class TaskListViewController: UITableViewController {
     
     private let callID = "task"
@@ -56,6 +60,7 @@ class TaskListViewController: UITableViewController {
     
     @objc private func addNewTask() {
         let taskVC = TaskViewController()
+        taskVC.delegate = self
         present(taskVC, animated: true)
     }
 }
@@ -72,5 +77,12 @@ extension TaskListViewController {
         content.text = task.title
         cell.contentConfiguration = content
         return cell
+    }
+}
+
+extension TaskListViewController: TaskViewControllerDelegate {
+    func reloadData() {
+        taskList = StorageManager.shared.fetch()
+        tableView.reloadData()
     }
 }
