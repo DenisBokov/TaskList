@@ -17,17 +17,23 @@ class TaskViewController: UIViewController {
     }()
     
     private lazy var saveButton: UIButton = {
-        var buttonConfiguration = UIButton.Configuration.filled()
-        buttonConfiguration.title = "Save Task"
-        buttonConfiguration.baseBackgroundColor = UIColor(
-            red: 166/255,
-            green: 123/255,
-            blue: 91/255,
-            alpha: 1
+        setupButtons(
+            "Save Task",
+            colorButton: UIColor(red: 166/255, green: 123/255, blue: 91/255, alpha: 1),
+            action: UIAction { [unowned self] _ in
+                dismiss(animated: true)
+            }
         )
-        return UIButton(configuration: buttonConfiguration, primaryAction: UIAction { [ unowned self ] _ in
-            dismiss(animated: true)
-        })
+    }()
+    
+    private lazy var cancelButton: UIButton = {
+        setupButtons(
+            "Cancel",
+            colorButton: UIColor(red: 183/255, green: 65/255, blue: 14/255, alpha: 1),
+            action: UIAction { [unowned self] _ in
+                dismiss(animated: true)
+            }
+        )
     }()
 
     override func viewDidLoad() {
@@ -39,7 +45,7 @@ class TaskViewController: UIViewController {
             alpha: 1
         )
         
-        setrupSabviews(taskTextField, saveButton)
+        setrupSabviews(taskTextField, saveButton, cancelButton)
         setupConstraints()
     }
     
@@ -52,6 +58,7 @@ class TaskViewController: UIViewController {
     private func setupConstraints() {
         taskTextField.translatesAutoresizingMaskIntoConstraints = false
         saveButton.translatesAutoresizingMaskIntoConstraints = false
+        cancelButton.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             taskTextField.topAnchor.constraint(equalTo: view.topAnchor, constant: 80),
@@ -60,9 +67,21 @@ class TaskViewController: UIViewController {
             
             saveButton.topAnchor.constraint(equalTo: taskTextField.bottomAnchor, constant: 40),
             saveButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40),
-            saveButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40)
+            saveButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40),
+            
+            cancelButton.topAnchor.constraint(equalTo: saveButton.bottomAnchor, constant: 40),
+            cancelButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40),
+            cancelButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40)
         ])
 
     }
-
+    
+    private func setupButtons(_ buttonName: String, colorButton: UIColor, action: UIAction) -> UIButton {
+        var attributes = AttributeContainer()
+        attributes.font = UIFont.boldSystemFont(ofSize: 18)
+        var buttonConfiguration = UIButton.Configuration.filled()
+        buttonConfiguration.attributedTitle = AttributedString(buttonName, attributes: attributes)
+        buttonConfiguration.baseBackgroundColor = colorButton
+        return UIButton(configuration: buttonConfiguration, primaryAction: action)
+    }
 }
