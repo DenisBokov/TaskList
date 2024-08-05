@@ -37,5 +37,19 @@ class StorageManager {
         }
     }
     
+    func save(title titelName: String) {
+        let task = Task(context: persistentContainer.viewContext)
+        task.title = titelName
+        
+        if persistentContainer.viewContext.hasChanges {
+            do {
+                try persistentContainer.viewContext.save()
+            } catch let error {
+                print(error.localizedDescription)
+            }
+        }
+      
+    }
+    
     private init() {}
 }

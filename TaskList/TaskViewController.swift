@@ -9,6 +9,8 @@ import UIKit
 
 class TaskViewController: UIViewController {
     
+    private let storageManager = StorageManager.shared
+    
     private lazy var taskTextField: UITextField = {
         let textField = UITextField()
         textField.borderStyle = .roundedRect
@@ -21,6 +23,7 @@ class TaskViewController: UIViewController {
             "Save Task",
             colorButton: UIColor(red: 166/255, green: 123/255, blue: 91/255, alpha: 1),
             action: UIAction { [unowned self] _ in
+                storageManager.save(title: taskTextField.text ?? "")
                 dismiss(animated: true)
             }
         )
