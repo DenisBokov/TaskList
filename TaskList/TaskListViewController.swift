@@ -85,12 +85,7 @@ class TaskListViewController: UITableViewController {
 
 extension TaskListViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        if isFiltering {
-//            return filtredTasks.count
-//        }
-//        
-//        return taskList.count
-        
+
         return isFiltering ? filtredTasks.count : taskList.count
     }
     
@@ -98,12 +93,8 @@ extension TaskListViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: callID, for: indexPath)
         var task: Task
         
-        if isFiltering {
-            task = filtredTasks[indexPath.row]
-        } else {
-            task = taskList[indexPath.row]
-        }
-//        let task = taskList[indexPath.row]
+        task = isFiltering ? filtredTasks[indexPath.row] : taskList[indexPath.row]
+
         var content = cell.defaultContentConfiguration()
         content.text = task.title
         cell.contentConfiguration = content
