@@ -47,7 +47,7 @@ class StorageManager {
             } catch let error {
                 print(error.localizedDescription)
             }
-        }
+        }     
       
     }
     
@@ -60,6 +60,11 @@ class StorageManager {
             print(error.localizedDescription)
         }
         return []
+    }
+    
+    func delete(to task: Task) {
+        let deleteRequest = persistentContainer.viewContext
+        deleteRequest.delete(task)
     }
     
     private init() {}

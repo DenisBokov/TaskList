@@ -69,9 +69,11 @@ class TaskListViewController: UITableViewController {
     }
     
     @objc private func addNewTask() {
-        let taskVC = TaskViewController()
-        taskVC.delegate = self
-        present(taskVC, animated: true)
+//        let taskVC = TaskViewController()
+//        taskVC.delegate = self
+//        present(taskVC, animated: true)
+        
+        showAlert(withTitle: "New Task", andMessage: "What do you want to do?")
     }
     
     private func setupSearchController() {
@@ -80,6 +82,24 @@ class TaskListViewController: UITableViewController {
         searchController.searchBar.placeholder = "Search"
         navigationItem.searchController = searchController
         definesPresentationContext = true
+    }
+    
+    private func showAlert(withTitle title: String, andMessage message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let saveAction = UIAlertAction(title: "Save", style: .default) { [unowned self] _ in
+            guard let task = alert.textFields?.first?.text, !task.isEmpty else { return }
+            StorageManager.shared.save(title: task)
+            tableView.reloadData()
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .destructive)
+        alert.addAction(saveAction)
+        alert.addAction(cancelAction)
+        alert.addTextField { textField in
+            textField.placeholder = "New Task"
+        }
+        
+        present(alert, animated: true)
     }
 }
 
@@ -99,6 +119,18 @@ extension TaskListViewController {
         content.text = task.title
         cell.contentConfiguration = content
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let action = UIContextualAction(style: .destructive, title: "Delete") { [unowned self] action, view, completionHandler in
+            let taskToRemove = taskList[indexPath.row]
+            
+            StorageManager.shared.delete(to: taskToRemove)
+            
+//            StorageManager.shared.save(title: <#String#>)
+        }
+        
+        return UISwipeActionsConfiguration(actions: [action])
     }
 }
 
