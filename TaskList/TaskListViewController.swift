@@ -126,8 +126,7 @@ extension TaskListViewController {
             let taskToRemove = taskList[indexPath.row]
             
             StorageManager.shared.delete(to: taskToRemove)
-            
-//            StorageManager.shared.save(title: <#String#>)
+            tableView.reloadData()
         }
         
         return UISwipeActionsConfiguration(actions: [action])

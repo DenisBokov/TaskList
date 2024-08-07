@@ -65,6 +65,7 @@ class StorageManager {
     func delete(to task: Task) {
         let deleteRequest = persistentContainer.viewContext
         deleteRequest.delete(task)
+        saveContext()
     }
     
     private init() {}
