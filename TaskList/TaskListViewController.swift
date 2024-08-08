@@ -7,9 +7,9 @@
 
 import UIKit
 
-protocol TaskViewControllerDelegate {
-    func reloadData()
-}
+//protocol TaskViewControllerDelegate {
+//    func reloadData()
+//}
 
 class TaskListViewController: UITableViewController {
     
@@ -38,7 +38,16 @@ class TaskListViewController: UITableViewController {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: callID)
         
         setupNavigationBar()
-        taskList = StorageManager.shared.fetch()
+//        taskList = StorageManager.shared.fetch()
+        
+        StorageManager.shared.fetch { result in
+            switch result {
+            case .success(let task):
+                self.taskList = task
+            case .failure(let error):
+                print("ERROR: ", error.localizedDescription)
+            }
+        }
     }
 
     private func setupNavigationBar() {
@@ -133,12 +142,12 @@ extension TaskListViewController {
     }
 }
 
-extension TaskListViewController: TaskViewControllerDelegate {
-    func reloadData() {
-        taskList = StorageManager.shared.fetch()
-        tableView.reloadData()
-    }
-}
+//extension TaskListViewController: TaskViewControllerDelegate {
+//    func reloadData() {
+//        taskList = StorageManager.shared.fetch()
+//        tableView.reloadData()
+//    }
+//}
 
 extension TaskListViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {

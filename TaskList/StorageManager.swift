@@ -8,12 +8,12 @@
 import Foundation
 import CoreData
 
-class StorageManager {
+final class StorageManager {
     static let shared = StorageManager()
     
     // MARK: - Core Data stack
 
-    let persistentContainer: NSPersistentContainer = {
+    private let persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "TaskList")
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
@@ -22,8 +22,14 @@ class StorageManager {
         })
         return container
     }()
-
-    // MARK: - Core Data Saving support
+    
+    private let viewContext: NSManagedObjectContext
+    
+    private init() {
+        viewContext = persistentContainer.viewContext
+    }
+    
+    // MARK: - Core Data Saving
 
     func saveContext () {
         let context = persistentContainer.viewContext
@@ -37,36 +43,39 @@ class StorageManager {
         }
     }
     
-    func save(title titelName: String) {
-        let task = Task(context: persistentContainer.viewContext)
-        task.title = titelName
-        
-        if persistentContainer.viewContext.hasChanges {
-            do {
-                try persistentContainer.viewContext.save()
-            } catch let error {
-                print(error.localizedDescription)
-            }
-        }     
-      
-    }
+    // MARK: - Core Data Create
     
-    func fetch() -> [Task] {
-        let fetchRequest = Task.fetchRequest()
-        
-        do {
-            return try persistentContainer.viewContext.fetch(fetchRequest)
-        } catch let error  {
-            print(error.localizedDescription)
-        }
-        return []
-    }
-    
-    func delete(to task: Task) {
-        let deleteRequest = persistentContainer.viewContext
-        deleteRequest.delete(task)
+    func create(for taskName: String, complition: (Task) -> Void) {
+        let task = Task(context: viewContext)
+        task.title = taskName
+        complition(task)
         saveContext()
     }
     
-    private init() {}
+    // MARK: - Core Data fechData
+    
+    func fetch(complition: (Result<[Task], Error>) -> Void) {
+        let fetchRequest = Task.fetchRequest()
+        
+        do {
+            let task = try viewContext.fetch(fetchRequest)
+            complition(.success(task))
+        } catch let error  {
+            complition(.failure(error))
+        }
+    }
+    
+    // MARK: - Core Data Update
+    
+    func update(for task: Task, and name: String) {
+        task.title = name
+        saveContext()
+    }
+    
+    // MARK: - Core Data Delete
+    
+    func delete(to task: Task) {
+        viewContext.delete(task)
+        saveContext()
+    }
 }

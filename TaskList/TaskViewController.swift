@@ -9,7 +9,7 @@ import UIKit
 
 class TaskViewController: UIViewController {
     
-    var delegate: TaskViewControllerDelegate!
+//    var delegate: TaskViewControllerDelegate!
     
     private let storageManager = StorageManager.shared
     
@@ -26,7 +26,7 @@ class TaskViewController: UIViewController {
             colorButton: UIColor(red: 166/255, green: 123/255, blue: 91/255, alpha: 1),
             action: UIAction { [unowned self] _ in
                 storageManager.save(title: taskTextField.text ?? "")
-                delegate.reloadData()
+//                delegate.reloadData()
                 dismiss(animated: true)
             }
         )
