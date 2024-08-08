@@ -76,7 +76,7 @@ class TaskListViewController: UITableViewController {
 //        taskVC.delegate = self
 //        present(taskVC, animated: true)
         
-        showAlert(withTitle: "New Task", andMessage: "What do you want to do?")
+        showAlertForAddTask(withTitle: "New Task", andMessage: "What do you want to do?")
     }
     
     private func setupSearchController() {
@@ -98,7 +98,7 @@ class TaskListViewController: UITableViewController {
         }
     }
     
-    private func save(taskName: String) {
+    private func addTask(taskName: String) {
         StorageManager.shared.create(for: taskName) { task in
             taskList.append(task)
             tableView.insertRows(
@@ -106,23 +106,6 @@ class TaskListViewController: UITableViewController {
                 with: .automatic
             )
         }
-    }
-    
-    private func showAlert(withTitle title: String, andMessage message: String) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let saveAction = UIAlertAction(title: "Save", style: .default) { [unowned self] _ in
-            guard let task = alert.textFields?.first?.text, !task.isEmpty else { return }
-            save(taskName: task)
-        }
-        
-        let cancelAction = UIAlertAction(title: "Cancel", style: .destructive)
-        alert.addAction(saveAction)
-        alert.addAction(cancelAction)
-        alert.addTextField { textField in
-            textField.placeholder = "New Task"
-        }
-        
-        present(alert, animated: true)
     }
 }
 
@@ -149,6 +132,8 @@ extension TaskListViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let task = taskList[indexPath.row]
+        
+        showAlertForUpdateTask(withTitle: "Update", andMessage: "Do you want to change?", for: task)
     }
     
     /// Реализация удаления задачи
@@ -164,6 +149,43 @@ extension TaskListViewController {
         }
         
         return UISwipeActionsConfiguration(actions: [action])
+    }
+}
+
+extension TaskListViewController {
+    private func showAlertForAddTask(withTitle title: String, andMessage message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let saveAction = UIAlertAction(title: "Save", style: .default) { [unowned self] _ in
+            guard let task = alert.textFields?.first?.text, !task.isEmpty else { return }
+            addTask(taskName: task)
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .destructive)
+        alert.addAction(saveAction)
+        alert.addAction(cancelAction)
+        alert.addTextField { textField in
+            textField.placeholder = "New Task"
+        }
+        
+        present(alert, animated: true)
+    }
+    
+    private func showAlertForUpdateTask(withTitle title: String, andMessage message: String,for task: Task) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let saveAction = UIAlertAction(title: "Save", style: .default) { [unowned self] _ in
+            guard let taskName = alert.textFields?.first?.text, !taskName.isEmpty else { return }
+            StorageManager.shared.update(for: task, and: taskName)
+            tableView.reloadData()
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .destructive)
+        alert.addAction(saveAction)
+        alert.addAction(cancelAction)
+        alert.addTextField { textField in
+            textField.text = task.title
+        }
+        
+        present(alert, animated: true)
     }
 }
 
